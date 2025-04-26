@@ -1,0 +1,307 @@
+<div class="min-h-screen flex flex-col bg-gradient-to-br from-sky-50 to-indigo-50">
+    <!-- Header -->
+    <app-navbar />
+    
+    <!-- Main -->
+    <main class="flex-1 flex items-center justify-center p-6 relative">
+      <!-- Background decoration -->
+      <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-sky-100 rounded-full opacity-70 blur-3xl"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-100 rounded-full opacity-70 blur-3xl"></div>
+      </div>
+      
+      <div class="w-full max-w-md relative">
+        <!-- Card with glass effect -->
+        <div class="backdrop-blur-sm bg-white/80 rounded-2xl shadow-xl overflow-hidden border border-white/50">
+          <!-- Tabs -->
+          <div class="grid grid-cols-2">
+            <button
+              (click)="selectedTab = 'login'"
+              [class.bg-white]="selectedTab==='login'"
+              [class.text-sky-600]="selectedTab==='login'"
+              [class.font-semibold]="selectedTab==='login'"
+              class="py-4 text-center transition-all duration-300 relative"
+            >
+              <span>Đăng nhập</span>
+              <span *ngIf="selectedTab==='login'" class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-sky-400 to-indigo-500"></span>
+            </button>
+            <button
+              (click)="selectedTab = 'register'"
+              [class.bg-white]="selectedTab==='register'"
+              [class.text-sky-600]="selectedTab==='register'"
+              [class.font-semibold]="selectedTab==='register'"
+              class="py-4 text-center transition-all duration-300 relative"
+            >
+              <span>Đăng ký</span>
+              <span *ngIf="selectedTab==='register'" class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-sky-400 to-indigo-500"></span>
+            </button>
+          </div>
+  
+          <!-- Login Form -->
+          <div *ngIf="selectedTab==='login'" class="p-8">
+            <div class="text-center mb-6">
+              <h2 class="text-2xl font-bold mb-1 bg-clip-text text-transparent bg-gradient-to-r from-sky-500 to-indigo-600">Chào mừng trở lại</h2>
+              <p class="text-slate-500">Đăng nhập vào tài khoản của bạn để bắt đầu cuộc họp</p>
+            </div>
+  
+            <!-- Google OAuth -->
+            <button
+              (click)="handleGoogleLogin()"
+              [disabled]="isLoading"
+              class="w-full mb-6 flex items-center justify-center gap-2 border border-slate-200 rounded-lg py-3 px-4 hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 shadow-sm"
+            >
+              <!-- embed SVG Google logo -->
+              <svg class="h-5 w-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              <span class="font-medium">{{ isLoading ? 'Đang xử lý...' : 'Đăng nhập bằng Google' }}</span>
+            </button>
+  
+            <!-- Divider -->
+            <div class="relative mb-6">
+              <div class="absolute inset-0 flex items-center">
+                <span class="w-full border-t border-slate-200"></span>
+              </div>
+              <div class="relative flex justify-center text-xs uppercase">
+                <span class="bg-white px-4 text-slate-500 rounded-full">Hoặc đăng nhập với email</span>
+              </div>
+            </div>
+  
+            <!-- Email/Password -->
+            <form (ngSubmit)="handleLogin()" class="space-y-5">
+              <div class="space-y-2">
+                <label for="login-email" class="block text-sm font-medium text-slate-700">Email</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                  </div>
+                  <input
+                    id="login-email"
+                    type="email"
+                    [(ngModel)]="loginEmail"
+                    name="loginEmail"
+                    required
+                    placeholder="your-email@example.com"
+                    class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
+                  />
+                </div>
+              </div>
+              
+              <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                  <label for="login-password" class="block text-sm font-medium text-slate-700">Mật khẩu</label>
+                  <a routerLink="/forgot-password" class="text-sm text-sky-600 hover:text-sky-700 font-medium">Quên mật khẩu?</a>
+                </div>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    id="login-password"
+                    type="password"
+                    [(ngModel)]="loginPassword"
+                    name="loginPassword"
+                    required
+                    placeholder="••••••••"
+                    class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
+                  />
+                </div>
+              </div>
+              
+              <div class="flex items-center">
+                <div class="relative flex items-start">
+                  <div class="flex items-center h-5">
+                    <input
+                      id="remember"
+                      type="checkbox"
+                      [(ngModel)]="rememberMe"
+                      name="rememberMe"
+                      class="h-4 w-4 text-sky-600 border-slate-300 rounded focus:ring-sky-500"
+                    />
+                  </div>
+                  <div class="ml-2 text-sm">
+                    <label for="remember" class="font-medium text-slate-700">Ghi nhớ đăng nhập</label>
+                  </div>
+                </div>
+              </div>
+              
+              <button
+                type="submit"
+                [disabled]="isLoading"
+                class="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:from-sky-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all duration-300 shadow-md disabled:opacity-70"
+              >
+                <div class="flex items-center justify-center">
+                  <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>{{ isLoading ? 'Đang xử lý...' : 'Đăng nhập' }}</span>
+                </div>
+              </button>
+            </form>
+  
+            <!-- Footer link -->
+            <div class="text-center mt-6 text-sm text-slate-600">
+              Chưa có tài khoản?
+              <button (click)="selectedTab = 'register'" class="text-sky-600 hover:text-sky-700 font-medium ml-1">Đăng ký ngay</button>
+            </div>
+          </div>
+  
+          <!-- Register Form -->
+          <div *ngIf="selectedTab==='register'" class="p-8">
+            <div class="text-center mb-6">
+              <h2 class="text-2xl font-bold mb-1 bg-clip-text text-transparent bg-gradient-to-r from-sky-500 to-indigo-600">Tạo tài khoản mới</h2>
+              <p class="text-slate-500">Đăng ký để sử dụng dịch vụ của chúng tôi</p>
+            </div>
+  
+            <!-- Google OAuth -->
+            <button
+              (click)="handleGoogleLogin()"
+              [disabled]="isLoading"
+              class="w-full mb-6 flex items-center justify-center gap-2 border border-slate-200 rounded-lg py-3 px-4 hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 shadow-sm"
+            >
+              <!-- SVG Google -->
+              <svg class="h-5 w-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              <span class="font-medium">{{ isLoading ? 'Đang xử lý...' : 'Đăng ký bằng Google' }}</span>
+            </button>
+  
+            <div class="relative mb-6">
+              <div class="absolute inset-0 flex items-center">
+                <span class="w-full border-t border-slate-200"></span>
+              </div>
+              <div class="relative flex justify-center text-xs uppercase">
+                <span class="bg-white px-4 text-slate-500 rounded-full">Hoặc đăng ký với email</span>
+              </div>
+            </div>
+  
+            <form (ngSubmit)="handleRegister()" class="space-y-5">
+              <div class="space-y-2">
+                <label for="reg-name" class="block text-sm font-medium text-slate-700">Họ và tên</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    id="reg-name"
+                    type="text"
+                    [(ngModel)]="regName"
+                    name="regName"
+                    required
+                    placeholder="Nguyễn Văn A"
+                    class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
+                  />
+                </div>
+              </div>
+              
+              <div class="space-y-2">
+                <label for="reg-email" class="block text-sm font-medium text-slate-700">Email</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                  </div>
+                  <input
+                    id="reg-email"
+                    type="email"
+                    [(ngModel)]="regEmail"
+                    name="regEmail"
+                    required
+                    placeholder="your-email@example.com"
+                    class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
+                  />
+                </div>
+              </div>
+              
+              <div class="space-y-2">
+                <label for="reg-pass" class="block text-sm font-medium text-slate-700">Mật khẩu</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    id="reg-pass"
+                    type="password"
+                    [(ngModel)]="regPassword"
+                    name="regPassword"
+                    required
+                    placeholder="••••••••"
+                    class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
+                  />
+                </div>
+              </div>
+              
+              <div class="space-y-2">
+                <label for="reg-confirm" class="block text-sm font-medium text-slate-700">Xác nhận mật khẩu</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    id="reg-confirm"
+                    type="password"
+                    [(ngModel)]="regConfirmPassword"
+                    name="regConfirmPassword"
+                    required
+                    placeholder="••••••••"
+                    class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
+                  />
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="flex items-center h-5 mt-1">
+                  <input
+                    id="terms"
+                    type="checkbox"
+                    [(ngModel)]="acceptedTerms"
+                    name="acceptedTerms"
+                    required
+                    class="h-4 w-4 text-sky-600 border-slate-300 rounded focus:ring-sky-500"
+                  />
+                </div>
+                <div class="ml-2 text-sm">
+                  <label for="terms" class="font-medium text-slate-700">
+                    Tôi đồng ý với
+                    <a routerLink="/terms" class="text-sky-600 hover:text-sky-700 underline">điều khoản sử dụng</a>
+                    và
+                    <a routerLink="/privacy" class="text-sky-600 hover:text-sky-700 underline">chính sách bảo mật</a>
+                  </label>
+                </div>
+              </div>
+              
+              <button
+                type="submit"
+                [disabled]="isLoading"
+                class="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:from-sky-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all duration-300 shadow-md disabled:opacity-70"
+              >
+                <div class="flex items-center justify-center">
+                  <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>{{ isLoading ? 'Đang xử lý...' : 'Đăng ký' }}</span>
+                </div>
+              </button>
+            </form>
+  
+            <div class="text-center mt-6 text-sm text-slate-600">
+              Đã có tài khoản?
+              <button (click)="selectedTab = 'login'" class="text-sky-600 hover:text-sky-700 font-medium ml-1">Đăng nhập</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  

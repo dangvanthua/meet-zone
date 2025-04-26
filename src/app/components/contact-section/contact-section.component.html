@@ -1,0 +1,237 @@
+<section id="contact" class="py-20 relative overflow-hidden">
+    <!-- Background with gradient -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 bg-slate-50/50"></div>
+      <div class="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-white to-transparent"></div>
+      <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent"></div>
+    </div>
+  
+    <div class="container mx-auto px-4 md:px-6 max-w-7xl">
+      <!-- Header -->
+      <div class="flex flex-col items-center text-center mb-16">
+        <div class="inline-flex items-center rounded-full bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700 ring-1 ring-inset ring-sky-200 mb-4">
+          Liên hệ với chúng tôi
+        </div>
+        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl bg-clip-text">
+          Hãy kết nối và trao đổi
+        </h2>
+        <p class="mt-4 text-lg text-slate-600 max-w-[800px]">
+          Chúng tôi luôn sẵn sàng lắng nghe ý kiến, giải đáp thắc mắc và hỗ trợ bạn trong quá trình sử dụng dịch vụ
+        </p>
+      </div>
+  
+      <div class="grid lg:grid-cols-2 gap-8 items-start">
+        <!-- Form -->
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-8">
+          <h3 class="text-2xl font-bold mb-6">Gửi tin nhắn cho chúng tôi</h3>
+          <form (ngSubmit)="onSubmit()" #contactForm="ngForm" class="space-y-6">
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label for="name" class="text-sm font-medium">
+                  Họ và tên <span class="text-rose-500">*</span>
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  [(ngModel)]="formData.name"
+                  required
+                  class="w-full px-4 py-2 border border-slate-200 rounded-md focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50 transition-all"
+                />
+              </div>
+              <div class="space-y-2">
+                <label for="email" class="text-sm font-medium">
+                  Email <span class="text-rose-500">*</span>
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  [(ngModel)]="formData.email"
+                  required
+                  class="w-full px-4 py-2 border border-slate-200 rounded-md focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50 transition-all"
+                />
+              </div>
+            </div>
+  
+            <div class="space-y-2">
+              <label for="subject" class="text-sm font-medium">
+                Chủ đề <span class="text-rose-500">*</span>
+              </label>
+              <input
+                id="subject"
+                name="subject"
+                type="text"
+                [(ngModel)]="formData.subject"
+                required
+                class="w-full px-4 py-2 border border-slate-200 rounded-md focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50 transition-all"
+              />
+            </div>
+  
+            <div class="space-y-2">
+              <label for="message" class="text-sm font-medium">
+                Nội dung tin nhắn <span class="text-rose-500">*</span>
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                [(ngModel)]="formData.message"
+                required
+                class="w-full px-4 py-2 border border-slate-200 rounded-md focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50 transition-all resize-none"
+              ></textarea>
+            </div>
+  
+            <button
+              type="submit"
+              [disabled]="formState === 'submitting'"
+              class="w-full flex items-center justify-center px-4 py-3 rounded-md bg-gradient-to-r from-sky-500 to-cyan-600 hover:from-sky-600 hover:to-cyan-700 text-white disabled:opacity-70 transition-all duration-300"
+            >
+              <ng-container *ngIf="formState==='submitting'">
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Đang gửi...
+              </ng-container>
+              <ng-container *ngIf="formState!=='submitting'">
+                <ng-icon name="ionSendOutline" class="mr-2 h-4 w-4"></ng-icon>Gửi tin nhắn
+              </ng-container>
+            </button>
+  
+            <div *ngIf="formState==='success'" class="bg-green-50 border border-green-100 text-green-700 px-4 py-3 rounded-lg flex items-start animate-in fade-in slide-in-from-top-5 duration-300">
+              <ng-icon name="ionCheckmarkCircleOutline" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"></ng-icon>
+              <p>Tin nhắn của bạn đã được gửi thành công. Chúng tôi sẽ phản hồi trong thời gian sớm nhất!</p>
+            </div>
+  
+            <div *ngIf="formState==='error'" class="bg-rose-50 border border-rose-100 text-rose-700 px-4 py-3 rounded-lg flex items-start animate-in fade-in slide-in-from-top-5 duration-300">
+              <ng-icon name="ionAlertCircleOutline" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"></ng-icon>
+              <p>Đã có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại sau hoặc liên hệ qua các phương thức khác.</p>
+            </div>
+          </form>
+        </div>
+  
+        <!-- Info & Social -->
+        <!-- <div class="space-y-8">
+          <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-8">
+            <h3 class="text-2xl font-bold mb-6">Thông tin liên hệ</h3>
+            <div class="space-y-6">
+              <div class="flex items-start group">
+                <div class="bg-sky-50 p-3 rounded-full mr-4 group-hover:bg-sky-100 transition-colors duration-300">
+                  <ng-icon name="ionMapOutline" class="h-6 w-6 text-sky-600"></ng-icon>
+                </div>
+                <div>
+                  <h4 class="font-medium text-lg">Địa chỉ</h4>
+                  <p class="text-slate-600 mt-1">123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</p>
+                </div>
+              </div>
+              <div class="flex items-start group">
+                <div class="bg-sky-50 p-3 rounded-full mr-4 group-hover:bg-sky-100 transition-colors duration-300">
+                  <ng-icon name="ionMailOutline" class="h-6 w-6 text-sky-600"></ng-icon>
+                </div>
+                <div>
+                  <h4 class="font-medium text-lg">Email</h4>
+                  <p class="text-slate-600 mt-1">
+                    <a href="mailto:info@meetapp.com" class="hover:text-sky-600 transition-colors">
+                      info&#64;meetapp.com
+                    </a>
+                  </p>
+                  <p class="text-slate-600">
+                    <a href="mailto:support@meetapp.com" class="hover:text-sky-600 transition-colors">
+                      support&#64;meetapp.com
+                    </a>
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start group">
+                <div class="bg-sky-50 p-3 rounded-full mr-4 group-hover:bg-sky-100 transition-colors duration-300">
+                  <ng-icon name="ionPhonePortraitOutline" class="h-6 w-6 text-sky-600"></ng-icon>
+                </div>
+                <div>
+                  <h4 class="font-medium text-lg">Điện thoại</h4>
+                  <p class="text-slate-600 mt-1">
+                    <a href="tel:+84123456789" class="hover:text-sky-600 transition-colors">
+                      (84) 123 456 789
+                    </a>
+                  </p>
+                  <p class="text-slate-600">
+                    <a href="tel:+84987654321" class="hover:text-sky-600 transition-colors">
+                      (84) 987 654 321
+                    </a>
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start group">
+                <div class="bg-sky-50 p-3 rounded-full mr-4 group-hover:bg-sky-100 transition-colors duration-300">
+                  <ng-icon name="ionStopwatchOutline" class="h-6 w-6 text-sky-600"></ng-icon>
+                </div>
+                <div>
+                  <h4 class="font-medium text-lg">Giờ làm việc</h4>
+                  <p class="text-slate-600 mt-1">Thứ Hai - Thứ Sáu: 8:00 - 17:30</p>
+                  <p class="text-slate-600">Thứ Bảy: 8:00 - 12:00</p>
+                  <p class="text-slate-600">Chủ Nhật: Nghỉ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-8">
+            <h3 class="text-2xl font-bold mb-6">Kết nối với chúng tôi</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md border border-slate-100 hover:border-sky-100 hover:bg-sky-50 transition-all duration-300"
+              >
+                <ng-icon name="ionLogoFacebook" class="h-8 w-8 text-[#1877F2] mb-2"></ng-icon>
+                <span class="text-sm font-medium">Facebook</span>
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md border border-slate-100 hover:border-sky-100 hover:bg-sky-50 transition-all duration-300"
+              >
+                <ng-icon name="ionLogoTwitter" class="h-8 w-8 text-[#1DA1F2] mb-2"></ng-icon>
+                <span class="text-sm font-medium">Twitter</span>
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md border border-slate-100 hover:border-sky-100 hover:bg-sky-50 transition-all duration-300"
+              >
+                <ng-icon name="ionLogoInstagram" class="h-8 w-8 text-[#E4405F] mb-2"></ng-icon>
+                <span class="text-sm font-medium">Instagram</span>
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md border border-slate-100 hover:border-sky-100 hover:bg-sky-50 transition-all duration-300"
+              >
+                <ng-icon name="ionLogoLinkedin" class="h-8 w-8 text-[#0A66C2] mb-2"></ng-icon>
+                <span class="text-sm font-medium">LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </div> -->
+        <div class="mt-12 rounded-2xl overflow-hidden shadow-xl border border-slate-100 h-[400px] relative bg-white/80 backdrop-blur-sm">
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-white flex items-center justify-center">
+              <div class="text-center max-w-md px-4">
+                <div class="w-16 h-16 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                  <ng-icon name="ionMapOutline" class="h-8 w-8 text-sky-600"></ng-icon>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 text-slate-900">Bản đồ vị trí công ty</h3>
+                <p class="text-slate-600">123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</p>
+                <button class="mt-4 px-4 py-2 border border-sky-200 rounded-md text-sky-700 hover:bg-sky-50 hover:text-sky-800 transition-colors">
+                  Xem bản đồ chi tiết
+                </button>
+              </div>
+            </div>
+          </div>  
+        </div>
+    </div>
+  </section>
+  

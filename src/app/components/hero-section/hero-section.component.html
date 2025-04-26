@@ -1,0 +1,105 @@
+<section class="relative overflow-hidden py-12 md:py-16">
+    <!-- Background elements -->
+    <!-- <div class="absolute inset-0 -z-10 overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-br from-sky-50 via-blue-50 to-white"></div>
+      <div class="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-gradient-to-bl from-sky-100 to-blue-50 opacity-50 blur-3xl"></div>
+      <div class="absolute top-60 -left-40 h-[400px] w-[400px] rounded-full bg-gradient-to-tr from-green-100 to-sky-50 opacity-50 blur-3xl"></div>
+    </div> -->
+
+    <div class="container mx-auto px-4 md:px-6 relative">
+      <!-- Heading -->
+      <div class="flex flex-col items-center text-center mb-12 md:mb-16">
+        <div class="inline-flex items-center gap-2 rounded-full bg-sky-50 px-3 py-1 text-sm font-medium text-sky-600 mb-6 border border-sky-100">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+          </span>
+          Phiên bản mới đã ra mắt
+        </div>
+
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight max-w-4xl bg-gradient-to-r from-gray-900 via-sky-800 to-gray-900 text-transparent bg-clip-text">
+          Họp trực tuyến <span class="text-sky-500">đơn giản</span> và <span class="text-green-500">hiệu quả</span> cho mọi người
+        </h1>
+
+        <p class="mt-6 text-lg text-gray-600 md:text-xl max-w-[800px]">
+          Kết nối với đồng nghiệp, bạn bè và gia đình một cách dễ dàng với chất lượng video HD, bảo mật cao và các tính năng hợp tác mạnh mẽ.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+          <a routerLink="/new-meeting">
+            <button class="flex items-center justify-center size-lg h-12 px-6 rounded-full bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white transition-colors">
+              <ng-icon name="ionVideocamOutline" class="mr-2 h-5 w-5"></ng-icon>
+              Bắt đầu cuộc họp
+              <ng-icon name="ionArrowForwardOutline" class="ml-2 h-4 w-4"></ng-icon>
+            </button>
+          </a>
+          <button (click)="toggleDialog()" class="h-12 px-6 rounded-full border border-sky-200 hover:bg-sky-50 hover:text-sky-600 text-sky-600 transition-colors">
+            Tham gia cuộc họp
+          </button>
+        </div>
+      </div>
+
+      <!-- Video preview -->
+      <div class="relative mx-auto max-w-5xl">
+        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
+            <div class="aspect-[16/9]">
+              <video autoplay loop muted playsinline class="w-full h-full object-cover">
+                <source src="/assets/video/hero_video.mp4" type="video/mp4" />
+                Trình duyệt của bạn không hỗ trợ thẻ video.
+              </video>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-12">
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 flex items-center">
+            <div class="rounded-full bg-sky-100 p-3 mr-4">
+              <ng-icon name="ionPersonOutline" class="h-6 w-6 text-sky-600"></ng-icon>
+            </div>
+            <div>
+              <p class="text-3xl font-bold">10M+</p>
+              <p class="text-gray-500">Người dùng</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 flex items-center">
+            <div class="rounded-full bg-green-100 p-3 mr-4">
+              <ng-icon name="ionVideocamOutline" class="h-6 w-6 text-green-600"></ng-icon>
+            </div>
+            <div>
+              <p class="text-3xl font-bold">5M+</p>
+              <p class="text-gray-500">Cuộc họp mỗi ngày</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 flex items-center">
+            <div class="rounded-full bg-purple-100 p-3 mr-4">
+              <ng-icon name="ionCellularOutline" class="h-6 w-6 text-purple-600"></ng-icon>
+            </div>
+            <div>
+              <p class="text-3xl font-bold">150+</p>
+              <p class="text-gray-500">Quốc gia</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Join Meeting Dialog -->
+      <div *ngIf="joinDialogOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/50" (click)="toggleDialog()"></div>
+        <!-- Dialog content -->
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full z-10">
+          <h2 class="text-lg font-semibold mb-2">Tham gia cuộc họp</h2>
+          <p class="text-sm text-gray-500 mb-4">Nhập mã cuộc họp để tham gia</p>
+          <input type="text" [(ngModel)]="meetingCode" placeholder="Nhập mã cuộc họp" class="w-full px-4 py-2 border rounded mb-4" />
+          <button
+            [disabled]="!meetingCode.trim()"
+            (click)="joinMeeting()"
+            class="w-full px-4 py-2 rounded bg-gradient-to-r from-sky-500 to-sky-700 text-white disabled:opacity-50 transition-colors"
+          >
+            Tham gia ngay
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>

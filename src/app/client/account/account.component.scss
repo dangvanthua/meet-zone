@@ -1,0 +1,97 @@
+/* Gradient text */
+.bg-clip-text {
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  
+  /* Blur effect */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Custom focus styles */
+  input:focus {
+    outline: none;
+  }
+  
+  /* Custom checkbox styles */
+  input[type="checkbox"] {
+    cursor: pointer;
+  }
+  
+  /* Button hover effect */
+  button.hover\:from-sky-600:hover {
+    background-image: linear-gradient(to right, #0284c7, #4f46e5);
+  }
+  
+  /* Loading spinner animation */
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Tab transition */
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  
+  .duration-300 {
+    transition-duration: 300ms;
+  }
+  
+  /* Gradient background animation */
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .bg-gradient-to-br {
+    background-size: 200% 200%;
+    animation: gradientAnimation 15s ease infinite;
+  }
+  
+  /* Blur elements animation */
+  @keyframes float {
+    0% {
+      transform: translatey(0px);
+    }
+    50% {
+      transform: translatey(-20px);
+    }
+    100% {
+      transform: translatey(0px);
+    }
+  }
+  
+  .blur-3xl {
+    filter: blur(64px);
+  }
+  
