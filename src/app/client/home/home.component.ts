@@ -9,16 +9,16 @@ import { FooterComponent } from "../../components/footer/footer.component";
 @Component({
   selector: 'app-home',
   imports: [
-    NavbarComponent,
     FeatureSectionComponent,
     HeroSectionComponent,
     HowItWorkComponent,
     ContactSectionComponent,
-    FooterComponent
+    FooterComponent,
+    NavbarComponent
 ],
   template: `
   <div class="flex min-h-screen flex-col">
-      <app-navbar></app-navbar>
+    <app-navbar/>
       <main class="flex-1">
         <app-hero-section></app-hero-section>
         <app-feature-section></app-feature-section>
