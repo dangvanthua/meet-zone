@@ -1,0 +1,252 @@
+<div class="min-h-screen bg-slate-50">
+    <!-- Header -->
+    <app-navbar/>
+
+    <main class="container mx-auto p-6 max-w-6xl space-y-8">
+      <!-- Create / Join -->
+      <div class="grid gap-6 md:grid-cols-3">
+        <!-- New / Join Card -->
+        <div class="md:col-span-2 grid gap-5 grid-cols-1 sm:grid-cols-2">
+          <button (click)="openCreate = true"
+                  class="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-sky-500 to-sky-600 text-white rounded-2xl shadow-lg hover:shadow-xl hover:from-sky-600 hover:to-sky-700 transition-all duration-300">
+            <ng-icon name="ionVideocamOutline" class="h-10 w-10 mb-3"></ng-icon>
+            <span class="text-lg font-medium">Tạo cuộc họp mới</span>
+          </button>
+          <button (click)="openJoin = true"
+                  class="flex flex-col items-center justify-center p-8 bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-lg hover:bg-gray-50 transition-all duration-300">
+            <ng-icon name="ionLogInOutline" class="h-10 w-10 mb-3 text-sky-600"></ng-icon>
+            <span class="text-lg font-medium text-gray-800">Tham gia cuộc họp</span>
+          </button>
+        </div>
+        <!-- Schedule Card -->
+        <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+          <h2 class="text-lg font-semibold mb-2 text-gray-800">Lên lịch cuộc họp</h2>
+          <p class="text-sm text-gray-600 mb-4">Tạo cuộc họp và gửi lời mời cho người tham gia</p>
+          <button class="w-full flex items-center justify-center gap-2 p-3 border bg-gradient-to-br from-sky-500 to-sky-600 text-white rounded-xl transition-colors">
+            <ng-icon name="ionCalendarOutline" class="h-5 w-5 text-sky-600"></ng-icon>
+            <span class="font-medium">Google Calendar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+        <div class="flex space-x-4 border-b border-gray-200">
+          <button (click)="tab='upcoming'"
+                  [class.border-b-2]="tab==='upcoming'"
+                  [class.border-sky-500]="tab==='upcoming'"
+                  [class.text-sky-600]="tab==='upcoming'"
+                  class="pb-3 font-medium text-gray-700 hover:text-sky-600 transition-colors">Sắp diễn ra</button>
+          <button (click)="tab='past'"
+                  [class.border-b-2]="tab==='past'"
+                  [class.border-sky-500]="tab==='past'"
+                  [class.text-sky-600]="tab==='past'"
+                  class="pb-3 font-medium text-gray-700 hover:text-sky-600 transition-colors">Đã kết thúc</button>
+        </div>
+        <div class="mt-6 space-y-5">
+          <!-- Upcoming -->
+          <ng-container *ngIf="tab==='upcoming'">
+            <ng-container *ngFor="let m of upcomingMeetings">
+              <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow transition-all flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                  <div class="bg-sky-100 text-sky-600 p-3 rounded-xl shadow-sm">
+                    <ng-icon name="ionVideocamOutline" class="h-6 w-6"></ng-icon>
+                  </div>
+                  <div>
+                    <h3 class="font-semibold text-gray-800">{{ m.title }}</h3>
+                    <div class="flex items-center gap-4 text-sm text-gray-500 mt-2">
+                      <div class="flex items-center gap-1">
+                        <ng-icon name="ionCalendarOutline" class="h-4 w-4 text-sky-500"></ng-icon>
+                        {{ m.date }}
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <ng-icon name="ionTimeOutline" class="h-4 w-4 text-sky-500"></ng-icon>
+                        {{ m.time }}
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <ng-icon name="ionPersonOutline" class="h-4 w-4 text-sky-500"></ng-icon>
+                        {{ m.participants }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button (click)="copyMeetingLink(m.code)"
+                          class="hidden md:flex items-center gap-1 text-gray-600 hover:text-gray-800 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
+                    <ng-icon name="ionCopyOutline" class="h-4 w-4"></ng-icon>
+                    <span>Sao chép</span>
+                  </button>
+                  <a [routerLink]="['/meeting', m.code]" 
+                     class="hidden md:flex items-center gap-1 bg-sky-100 text-sky-600 hover:bg-sky-200 px-3 py-1.5 rounded-lg transition-colors">
+                    <ng-icon name="ionVideocamOutline" class="h-4 w-4"></ng-icon>
+                    <span class="font-medium">Tham gia</span>
+                  </a>
+                  <!-- Dropdown -->
+                  <div class="relative">
+                    <button (click)="m.showMenu = !m.showMenu" 
+                            class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                      <ng-icon name="ionEllipsisVerticalOutline" class="h-5 w-5 text-gray-500"></ng-icon>
+                    </button>
+                    <div *ngIf="m.showMenu"
+                         class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden">
+                      <div class="px-4 py-2.5 hover:bg-gray-100 flex items-center gap-2 cursor-pointer transition-colors"
+                           (click)="copyMeetingLink(m.code); m.showMenu=false">
+                        <ng-icon name="ionCopyOutline" class="h-4 w-4 text-gray-600"></ng-icon> Sao chép
+                      </div>
+                      <div class="px-4 py-2.5 hover:bg-gray-100 flex items-center gap-2 cursor-pointer transition-colors">
+                        <ng-icon name="ionShareOutline" class="h-4 w-4 text-gray-600"></ng-icon> Chia sẻ
+                      </div>
+                      <div class="px-4 py-2.5 hover:bg-gray-100 flex items-center gap-2 cursor-pointer transition-colors">
+                        <ng-icon name="ionCalendarClearOutline" class="h-4 w-4 text-gray-600"></ng-icon> Chỉnh sửa
+                      </div>
+                      <div class="border-t border-gray-200 my-1"></div>
+                      <div class="px-4 py-2.5 hover:bg-red-50 flex items-center gap-2 text-red-600 cursor-pointer transition-colors">
+                        <ng-icon name="ionTrashOutline" class="h-4 w-4"></ng-icon> Xóa
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <!-- Past -->
+          <ng-container *ngIf="tab==='past'">
+            <ng-container *ngFor="let m of pastMeetings">
+              <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow transition-all flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                  <div class="bg-gray-100 text-gray-600 p-3 rounded-xl shadow-sm">
+                    <ng-icon name="ionVideocamOffOutline" class="h-6 w-6"></ng-icon>
+                  </div>
+                  <div>
+                    <h3 class="font-semibold text-gray-800">{{ m.title }}</h3>
+                    <div class="flex items-center gap-4 text-sm text-gray-500 mt-2 flex-wrap">
+                      <div class="flex items-center gap-1">
+                        <ng-icon name="ionCalendarOutline" class="h-4 w-4 text-gray-500"></ng-icon>
+                        {{ m.date }}
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <ng-icon name="ionTimeOutline" class="h-4 w-4 text-gray-500"></ng-icon>
+                        {{ m.time }}
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <ng-icon name="ionPersonOutline" class="h-4 w-4 text-gray-500"></ng-icon>
+                        {{ m.participants }}
+                      </div>
+                      <span *ngIf="m.isRecorded" 
+                            class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                        Đã ghi
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button *ngIf="m.isRecorded"
+                          class="hidden md:flex items-center gap-1 bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1.5 rounded-lg transition-colors">
+                    <ng-icon name="ionPlayOutline" class="h-4 w-4"></ng-icon> Bản ghi
+                  </button>
+                  <div class="relative">
+                    <button (click)="m.showMenu = !m.showMenu" 
+                            class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                      <ng-icon name="ionEllipsisHorizontalOutline" class="h-5 w-5 text-gray-500"></ng-icon>
+                    </button>
+                    <div *ngIf="m.showMenu"
+                         class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden">
+                      <div *ngIf="m.isRecorded"
+                           class="px-4 py-2.5 hover:bg-gray-100 flex items-center gap-2 cursor-pointer transition-colors">
+                        <ng-icon name="ionPlayOutline" class="h-4 w-4 text-green-600"></ng-icon> Xem bản ghi
+                      </div>
+                      <div class="px-4 py-2.5 hover:bg-gray-100 flex items-center gap-2 cursor-pointer transition-colors">
+                        <ng-icon name="ionDownloadOutline" class="h-4 w-4 text-gray-600"></ng-icon> Tải báo cáo
+                      </div>
+                      <div class="border-t border-gray-200 my-1"></div>
+                      <div class="px-4 py-2.5 hover:bg-red-50 flex items-center gap-2 text-red-600 cursor-pointer transition-colors">
+                        <ng-icon name="ionTrashOutline" class="h-4 w-4"></ng-icon> Xóa
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </main>
+
+    <!-- Create Meeting Modal -->
+    <div *ngIf="openCreate" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+      <div class="bg-white rounded-2xl p-6 w-96 shadow-xl">
+        <h2 class="text-xl font-semibold mb-2 text-gray-800">Tạo cuộc họp mới</h2>
+        <p class="text-gray-600 mb-5">Nhập tiêu đề và mã để tạo</p>
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Tiêu đề</label>
+            <input [(ngModel)]="newMeetingTitle" 
+                   class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all" 
+                   placeholder="Nhập tiêu đề cuộc họp" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Mô tả</label>
+            <input [(ngModel)]="newMeetingDescription" 
+            class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all" 
+            placeholder="Nhập mô tả cuộc họp" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Mã cuộc họp</label>
+            <div class="flex gap-2">
+              <input [(ngModel)]="newMeetingCode" 
+                     class="flex-1 border border-gray-300 px-4 py-2 rounded-lg bg-gray-50 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all" 
+                     readonly />
+              <button (click)="randomCode()"
+                      class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                <ng-icon name="ionRefreshOutline" class="h-5 w-5 text-gray-600"></ng-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 flex justify-end gap-3">
+          <button (click)="openCreate=false" 
+                  class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors">
+            Hủy
+          </button>
+          <button (click)="handleCreateMeeting()" 
+                  [disabled]="isCreatingMeeting"
+                  class="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 font-medium transition-colors disabled:opacity-70">
+            <span *ngIf="isCreatingMeeting" class="flex items-center gap-2">
+              <span class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+              Đang tạo...
+            </span>
+            <span *ngIf="!isCreatingMeeting">Tạo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Join Meeting Modal -->
+    <div *ngIf="openJoin" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+      <div class="bg-white rounded-2xl p-6 w-96 shadow-xl">
+        <h2 class="text-xl font-semibold mb-2 text-gray-800">Tham gia cuộc họp</h2>
+        <p class="text-gray-600 mb-5">Nhập mã để tham gia</p>
+        <div class="mb-6">
+          <input [(ngModel)]="joinMeetingCode" 
+                 placeholder="Nhập mã cuộc họp"
+                 class="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all" />
+        </div>
+        <div class="flex justify-end gap-3">
+          <button (click)="openJoin=false" 
+                  class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors">
+            Hủy
+          </button>
+          <button (click)="handleJoinMeeting()" 
+                  [disabled]="!joinMeetingCode.trim() || isJoiningMeeting"
+                  class="px-5 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 font-medium transition-colors disabled:opacity-70">
+            <span *ngIf="isJoiningMeeting" class="flex items-center gap-2">
+              <span class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+              Đang tham gia...
+            </span>
+            <span *ngIf="!isJoiningMeeting">Tham gia</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

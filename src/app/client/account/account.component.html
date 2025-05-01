@@ -175,7 +175,8 @@
               </div>
             </div>
   
-            <form (ngSubmit)="handleRegister()" class="space-y-5">
+            <form #regForm="ngForm" (ngSubmit)="handleRegister(regForm)" class="space-y-5">
+              <!-- Full Name -->
               <div class="space-y-2">
                 <label for="reg-name" class="block text-sm font-medium text-slate-700">Họ và tên</label>
                 <div class="relative">
@@ -186,16 +187,24 @@
                   </div>
                   <input
                     id="reg-name"
-                    type="text"
+                    name="full_name"
                     [(ngModel)]="regName"
-                    name="regName"
+                    #fullName="ngModel"
                     required
+                    minlength="2"
+                    maxlength="100"
                     placeholder="Nguyễn Văn A"
                     class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
                   />
                 </div>
+                <div *ngIf="fullName.invalid && (fullName.dirty || fullName.touched)" class="text-red-500 text-sm">
+                  <div *ngIf="fullName.errors?.['required']">Họ và tên là bắt buộc.</div>
+                  <div *ngIf="fullName.errors?.['minlength']">Phải có ít nhất 2 ký tự.</div>
+                  <div *ngIf="fullName.errors?.['maxlength']">Không vượt quá 100 ký tự.</div>
+                </div>
               </div>
-              
+            
+              <!-- Email -->
               <div class="space-y-2">
                 <label for="reg-email" class="block text-sm font-medium text-slate-700">Email</label>
                 <div class="relative">
@@ -207,16 +216,23 @@
                   </div>
                   <input
                     id="reg-email"
+                    name="email"
                     type="email"
                     [(ngModel)]="regEmail"
-                    name="regEmail"
+                    #email="ngModel"
                     required
-                    placeholder="your-email@example.com"
+                    email
+                    placeholder="you@example.com"
                     class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
                   />
                 </div>
+                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-red-500 text-sm">
+                  <div *ngIf="email.errors?.['required']">Email là bắt buộc.</div>
+                  <div *ngIf="email.errors?.['email']">Email không hợp lệ.</div>
+                </div>
               </div>
-              
+            
+              <!-- Password -->
               <div class="space-y-2">
                 <label for="reg-pass" class="block text-sm font-medium text-slate-700">Mật khẩu</label>
                 <div class="relative">
@@ -227,16 +243,23 @@
                   </div>
                   <input
                     id="reg-pass"
+                    name="password"
                     type="password"
                     [(ngModel)]="regPassword"
-                    name="regPassword"
+                    #password="ngModel"
                     required
+                    minlength="8"
                     placeholder="••••••••"
                     class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
                   />
                 </div>
+                <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-red-500 text-sm">
+                  <div *ngIf="password.errors?.['required']">Mật khẩu là bắt buộc.</div>
+                  <div *ngIf="password.errors?.['minlength']">Phải có ít nhất 8 ký tự.</div>
+                </div>
               </div>
-              
+            
+              <!-- Confirm Password -->
               <div class="space-y-2">
                 <label for="reg-confirm" class="block text-sm font-medium text-slate-700">Xác nhận mật khẩu</label>
                 <div class="relative">
@@ -247,41 +270,48 @@
                   </div>
                   <input
                     id="reg-confirm"
+                    name="re_password"
                     type="password"
                     [(ngModel)]="regConfirmPassword"
-                    name="regConfirmPassword"
+                    #confirm="ngModel"
                     required
                     placeholder="••••••••"
                     class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
                   />
                 </div>
+                <div *ngIf="(confirm.dirty || confirm.touched) && password.value !== confirm.value" class="text-red-500 text-sm">
+                  Mật khẩu không khớp.
+                </div>
               </div>
-              
-              <div class="flex items-start">
+            
+              <!-- Terms -->
+              <div class="flex items-start mt-4">
                 <div class="flex items-center h-5 mt-1">
                   <input
                     id="terms"
+                    name="acceptedTerms"
                     type="checkbox"
                     [(ngModel)]="acceptedTerms"
-                    name="acceptedTerms"
+                    #terms="ngModel"
                     required
                     class="h-4 w-4 text-sky-600 border-slate-300 rounded focus:ring-sky-500"
                   />
                 </div>
-                <div class="ml-2 text-sm">
-                  <label for="terms" class="font-medium text-slate-700">
+                <div class="ml-2">
+                  <label for="terms" class="text-sm text-slate-700">
                     Tôi đồng ý với
-                    <a routerLink="/terms" class="text-sky-600 hover:text-sky-700 underline">điều khoản sử dụng</a>
-                    và
-                    <a routerLink="/privacy" class="text-sky-600 hover:text-sky-700 underline">chính sách bảo mật</a>
+                    <a routerLink="/terms" class="text-sky-600 hover:text-sky-700 underline">điều khoản</a> và
+                    <a routerLink="/privacy" class="text-sky-600 hover:text-sky-700 underline">chính sách</a>
                   </label>
+                  <div *ngIf="terms.invalid && terms.touched" class="text-red-500 text-sm">Bạn phải đồng ý với điều khoản.</div>
                 </div>
               </div>
-              
+            
+              <!-- Submit -->
               <button
                 type="submit"
-                [disabled]="isLoading"
-                class="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:from-sky-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all duration-300 shadow-md disabled:opacity-70"
+                [disabled]="regForm.invalid || isLoading || regPassword !== regConfirmPassword"
+                class="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:from-sky-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all duration-300 shadow-md disabled:opacity-70 mt-4"
               >
                 <div class="flex items-center justify-center">
                   <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -291,8 +321,12 @@
                   <span>{{ isLoading ? 'Đang xử lý...' : 'Đăng ký' }}</span>
                 </div>
               </button>
+            
+              <!-- Messages -->
+              <div *ngIf="successMessage" class="text-green-600 mt-2 text-center">{{ successMessage }}</div>
+              <div *ngIf="errorMessage" class="text-red-600 mt-2 text-center">{{ errorMessage }}</div>
             </form>
-  
+            
             <div class="text-center mt-6 text-sm text-slate-600">
               Đã có tài khoản?
               <button (click)="selectedTab = 'login'" class="text-sky-600 hover:text-sky-700 font-medium ml-1">Đăng nhập</button>
@@ -302,4 +336,3 @@
       </div>
     </main>
   </div>
-  

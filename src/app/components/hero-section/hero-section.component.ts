@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,8 @@ import { ionArrowForwardOutline, ionCalendar, ionCellularOutline, ionPerson, ion
   imports: [
     NgIcon,
     FormsModule,
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   viewProviders: [
     provideIcons({
