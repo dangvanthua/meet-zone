@@ -22,7 +22,6 @@ export class ApiInterceptor implements HttpInterceptor {
     const excludedUrls = [
       `${apiUrl}/users/login`,
       `${apiUrl}/users/register`,
-      // Add other public endpoints as needed
     ];
 
     let authReq = req;

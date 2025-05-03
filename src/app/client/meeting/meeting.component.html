@@ -1,110 +1,100 @@
 <div class="min-h-screen flex flex-col">
-    <app-navbar/>
-    <!-- Main -->
-    <main class="flex-1 flex items-center justify-center bg-gray-50 py-12 px-4">
-      <div class="w-full max-w-4xl grid md:grid-cols-2 gap-8">
-        <!-- Join Form Card -->
-        <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8 space-y-6">
-          <h1 class="text-3xl font-bold text-gray-800 mb-4">Tham gia cuộc họp</h1>
-  
-          <div class="space-y-6">
-            <!-- Name Input -->
-            <div>
-              <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Tên của bạn</label>
-              <input
-                id="name"
-                type="text"
-                [(ngModel)]="name"
-                name="name"
-                placeholder="Nhập tên hiển thị của bạn"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-300"
-              />
-            </div>
-  
-            <!-- Mic & Cam Toggles -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-4">
-                <!-- Mic -->
-                <button
-                  (click)="isMicOn = !isMicOn"
-                  [ngClass]="{
-                    'bg-sky-500 text-white': isMicOn,
-                    'bg-white text-gray-700': !isMicOn
-                  }"
-                  class="p-3 rounded-full border border-gray-200 shadow-sm hover:scale-105 transition"
-                >
-                  <ng-icon [name]="isMicOn ? 'ionMicOutline' : 'ionMicOffOutline'" class="h-5 w-5"></ng-icon>
-                </button>
-                <span class="text-gray-700">{{ isMicOn ? 'Mic đang bật' : 'Mic đang tắt' }}</span>
-              </div>
-  
-              <div class="flex items-center space-x-4">
-                <!-- Cam -->
-                <button
-                  (click)="isVideoOn = !isVideoOn"
-                  [ngClass]="{
-                    'bg-sky-500 text-white': isVideoOn,
-                    'bg-white text-gray-700': !isVideoOn
-                  }"
-                  class="p-3 rounded-full border border-gray-200 shadow-sm hover:scale-105 transition"
-                >
-                  <ng-icon [name]="isVideoOn ? 'ionVideocamOutline' : 'ionVideocamOffOutline'" class="h-5 w-5"></ng-icon>
-                </button>
-                <span class="text-gray-700">{{ isVideoOn ? 'Camera đang bật' : 'Camera đang tắt' }}</span>
-              </div>
-            </div>
+  <app-navbar/>
+  <!-- Main -->
+  <main class="flex-1 flex items-center justify-center bg-gray-50 py-12 px-4">
+    <div class="w-full max-w-4xl grid md:grid-cols-2 gap-8">
+      <!-- Join Form Card -->
+      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8 space-y-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Tham gia cuộc họp</h1>
+        <div class="space-y-6">
+          <!-- Name Input -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Tên của bạn</label>
+            <input
+              id="name"
+              type="text"
+              [(ngModel)]="name"
+              name="name"
+              placeholder="Nhập tên hiển thị của bạn"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
           </div>
-  
-          <!-- Join Button -->
-          <button
-            (click)="handleJoin()"
-            [disabled]="!name.trim() || isJoining"
-            class="w-full py-3 rounded-xl text-white font-semibold
-                   bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-600 hover:to-sky-800
-                   shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {{ isJoining ? 'Đang tham gia...' : 'Tham gia ngay' }}
-          </button>
-  
-          <!-- Device Test Link -->
-          <div class="text-center">
-            <button
-              (click)="showDeviceTest = true"
-              class="text-sky-600 hover:text-sky-800 text-sm font-medium transition"
-            >
-              Kiểm tra thiết bị
-            </button>
+          <!-- Mic & Cam Toggles -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <!-- Mic -->
+              <button
+                (click)="toggleMic()"
+                [ngClass]="{
+                  'bg-sky-500 text-white': isMicOn,
+                  'bg-white text-gray-700': !isMicOn
+                }"
+                class="p-3 rounded-full border border-gray-200 shadow-sm hover:scale-105 transition"
+              >
+                <ng-icon [name]="isMicOn ? 'ionMicOutline' : 'ionMicOffOutline'" class="h-5 w-5"></ng-icon>
+              </button>
+              <span class="text-gray-700">{{ isMicOn ? 'Mic đang bật' : 'Mic đang tắt' }}</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <!-- Cam -->
+              <button
+                (click)="toggleCamera()"
+                [ngClass]="{
+                  'bg-sky-500 text-white': isVideoOn,
+                  'bg-white text-gray-700': !isVideoOn
+                }"
+                class="p-3 rounded-full border border-gray-200 shadow-sm hover:scale-105 transition"
+              >
+                <ng-icon [name]="isVideoOn ? 'ionVideocamOutline' : 'ionVideocamOffOutline'" class="h-5 w-5"></ng-icon>
+              </button>
+              <span class="text-gray-700">{{ isVideoOn ? 'Camera đang bật' : 'Camera đang tắt' }}</span>
+            </div>
           </div>
         </div>
-  
-        <!-- Preview Card -->
-        <div class="relative rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white">
-          <div *ngIf="isVideoOn; else avatarBlock" class="w-full h-72 md:h-full bg-gray-800 flex items-center justify-center">
-            <img src="/assets/placeholder.svg" alt="Camera preview" class="object-cover w-full h-full" />
+        <!-- Join Button -->
+        <button
+          (click)="handleJoin()"
+          [disabled]="!name.trim() || isJoining"
+          class="w-full py-3 rounded-xl text-white font-semibold
+                 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-600 hover:to-sky-800
+                 shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ isJoining ? 'Đang tham gia...' : 'Tham gia ngay' }}
+        </button>
+        <!-- Device Test Link -->
+        <div class="text-center">
+          <button
+            (click)="showDeviceTest = true"
+            class="text-sky-600 hover:text-sky-800 text-sm font-medium transition"
+          >
+            Kiểm tra thiết bị
+          </button>
+        </div>
+      </div>
+      <!-- Preview Card -->
+      <div class="relative rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white">
+        <div *ngIf="isVideoOn; else avatarBlock" class="w-full h-72 md:h-full bg-gray-800 flex items-center justify-center">
+          <video #previewVideo autoplay muted class="w-full h-full object-cover"></video>
+        </div>
+        <ng-template #avatarBlock>
+          <div class="w-full h-72 md:h-full bg-gray-800 flex items-center justify-center">
+            <div class="bg-gray-700 rounded-full w-28 h-28 flex items-center justify-center">
+              <span class="text-white text-5xl font-semibold">
+                {{ name ? (name | slice:0:1).toUpperCase() : '?' }}
+              </span>
+            </div>
           </div>
-          <ng-template #avatarBlock>
-            <div class="w-full h-72 md:h-full bg-gray-800 flex items-center justify-center">
-              <div class="bg-gray-700 rounded-full w-28 h-28 flex items-center justify-center">
-                <span class="text-white text-5xl font-semibold">
-                  {{ name ? (name | slice:0:1).toUpperCase() : '?' }}
-                </span>
-              </div>
-            </div>
-          </ng-template>
-          <div class="absolute bottom-4 inset-x-0 flex justify-center">
-            <div class="bg-black bg-opacity-60 text-white px-4 py-1 rounded-full text-sm">
-              Mã cuộc họp: {{ meetingId }}
-            </div>
+        </ng-template>
+        <div class="absolute bottom-4 inset-x-0 flex justify-center">
+          <div class="bg-black bg-opacity-60 text-white px-4 py-1 rounded-full text-sm">
+            Mã cuộc họp: {{ meetingCode }}
           </div>
         </div>
       </div>
-    </main>
-  
-    <!-- Device Test Modal (giữ nguyên nội dung bên trong) -->
-    <div
-    *ngIf="showDeviceTest"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4"
-  >
+    </div>
+  </main>
+  <!-- Device Test Modal -->
+  <div *ngIf="showDeviceTest" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4">
     <div class="bg-white rounded-lg w-full max-w-xl overflow-hidden">
       <div class="flex justify-between items-center p-4 border-b">
         <h2 class="text-lg font-semibold">Kiểm tra thiết bị</h2>
@@ -112,8 +102,77 @@
           <ng-icon name="ionCloseOutline" class="h-5 w-5"></ng-icon>
         </button>
       </div>
-      <!-- Tabs nội dung tương tự trước -->
-      <!-- ... -->
+      <div class="p-4">
+        <!-- Tabs -->
+        <div class="flex border-b mb-4">
+          <button
+            (click)="deviceTab = 'audio'"
+            [ngClass]="{'border-b-2 border-sky-500': deviceTab === 'audio'}"
+            class="px-4 py-2 text-sm font-medium text-gray-700"
+          >
+            Âm thanh
+          </button>
+          <button
+            (click)="deviceTab = 'video'"
+            [ngClass]="{'border-b-2 border-sky-500': deviceTab === 'video'}"
+            class="px-4 py-2 text-sm font-medium text-gray-700"
+          >
+            Video
+          </button>
+          <button
+            (click)="deviceTab = 'speaker'"
+            [ngClass]="{'border-b-2 border-sky-500': deviceTab === 'speaker'}"
+            class="px-4 py-2 text-sm font-medium text-gray-700"
+          >
+            Loa
+          </button>
+        </div>
+        <!-- Device Lists -->
+        <div *ngIf="deviceTab === 'audio'">
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Microphone</h3>
+          <select
+          #micSelect
+          [(ngModel)]="selectedMicId"
+          (change)="selectMic(micSelect.value)"
+          class="w-full p-2 border rounded"
+        >
+          <option *ngFor="let device of devices | filterByKind:'audioinput'"
+                  [value]="device.deviceId">
+            {{ device.label || ('Microphone ' + (device.deviceId | slice:0:5)) }}
+          </option>
+        </select>
+        </div>
+        <div *ngIf="deviceTab === 'video'">
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Camera</h3>
+          <select
+          #cameraSelect
+          [(ngModel)]="selectedCameraId"
+          (change)="selectCamera(cameraSelect.value)"
+          class="w-full p-2 border rounded"
+        >
+          <option
+            *ngFor="let device of devices | filterByKind:'videoinput'"
+            [value]="device.deviceId"
+          >
+            {{ device.label || ('Camera ' + (device.deviceId | slice:0:5)) }}
+          </option>
+        </select>        
+        </div>
+        <div *ngIf="deviceTab === 'speaker'">
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Loa</h3>
+          <select
+          #speakerSelect
+          [(ngModel)]="selectedSpeakerId"
+          (change)="selectAudioOutput(speakerSelect.value)"
+          class="w-full p-2 border rounded"
+        >
+          <option *ngFor="let device of devices | filterByKind:'audiooutput'"
+                  [value]="device.deviceId">
+            {{ device.label || ('Speaker ' + (device.deviceId | slice:0:5)) }}
+          </option>
+        </select>
+        </div>
+      </div>
       <div class="p-4 border-t flex justify-end">
         <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300" (click)="showDeviceTest = false">
           Đóng
@@ -121,5 +180,4 @@
       </div>
     </div>
   </div>
-  </div>
-  
+</div>

@@ -1,0 +1,17 @@
+.sky-ocean-gradient {
+    background: linear-gradient(
+        45deg,
+        rgba(176, 224, 230, 0.2),  /* Powder Blue */
+        rgba(70, 130, 180, 0.2),    /* Steel Blue */
+        rgba(32, 178, 170, 0.15)    /* Light Sea Green */
+    );
+    background-size: 400% 400%;
+    animation: gradientFlow 15s ease infinite;
+    backdrop-filter: blur(8px);
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}

@@ -61,6 +61,7 @@ export class AuthService {
   }
 
   exchangeCodeForToken(code: string): Observable<ApiResponse<TokenResDto>> {
+    localStorage.removeItem('access_token');
     const codeVerifier = localStorage.getItem(this.codeVerifierKey) || '';
     localStorage.removeItem(this.codeVerifierKey);
 
@@ -88,6 +89,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<ApiResponse<TokenResDto>> {
+    localStorage.removeItem('access_token'); 
     return this.http.post<ApiResponse<TokenResDto>>(
       `${this.apiUrl}/login`,
       { email, password },

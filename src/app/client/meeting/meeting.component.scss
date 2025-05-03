@@ -1,0 +1,36 @@
+.meeting-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  video {
+    width: 320px;
+    height: 240px;
+    margin: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .remote-videos {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .controls {
+    margin-top: 20px;
+  }
+  
+  .device-modal {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .tab-button {
+    transition: all 0.2s ease;
+  }
+  
+  .tab-button.active {
+    border-bottom: 2px solid #0ea5e9;
+    color: #0ea5e9;
+  }
